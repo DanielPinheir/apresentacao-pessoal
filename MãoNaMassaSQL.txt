@@ -1,0 +1,31 @@
+CREATE TABLE Animal (
+  codanimal SERIAL PRIMARY KEY,
+  nome VARCHAR(50) NOT NULL,
+  especie VARCHAR(50) NOT NULL,
+  sexo VARCHAR(1) NOT NULL,
+  cor VARCHAR(20) NOT NULL,
+  coddono INT NOT NULL REFERENCES Dono(coddono)
+);
+
+2. Criar a tabela Dono com os campos: coddono, nome, bairro
+
+CREATE TABLE Dono (
+  coddono SERIAL PRIMARY KEY,
+  nome VARCHAR(50) NOT NULL,
+  bairro VARCHAR(50) NOT NULL
+);
+
+3. Definir uma subconsulta para retornar o nome do pet cujo dono mora no bairro Vila Nova
+
+SELECT nome 
+FROM Animal 
+WHERE coddono IN (SELECT coddono 
+                  FROM Dono 
+                  WHERE bairro = 'Vila Nova');
+
+4. Definir uma consulta com join para retornar os donos (mesmo que não tenham pets associados) e a quantidade de pets que cada um possui
+
+SELECT Dono.nome, COUNT(Animal.coddono) AS quantidade_pets
+FROM Dono
+LEFT JOIN Animal ON Dono.coddono = Animal.coddono
+GROUP BY Dono.coddono;
